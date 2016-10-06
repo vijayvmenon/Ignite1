@@ -1,0 +1,112 @@
+<!--<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>-->
+<html ng-app="app">
+<body>  
+	<div class="container">
+	<div ng-controller="MainCtrl">
+	<h4 style="text-align:center;"><u>Receive By PO</u></h4>
+     <form role="form" class="form-horizontal">
+     <fieldset ng-disabled="row.entity.isLocked">
+         <div class="form-group">
+		    <div class="col-sm-4">
+		 	 <label>PO Number:</label>
+		      <input id="po" class="form-control" value={{row.entity.PoNbr}} readonly >
+		    </div>
+			
+           <div class="col-sm-4">
+		 	 <label>Delivery Number:</label>
+		      <input id="delnbr" class="form-control" value={{row.entity.DeliveryNo}} readonly >
+		    </div>
+			
+            <div class="col-sm-4">
+		 	 <label>Item Number:</label>
+		      <input id="itemnbr" class="form-control" value={{row.entity.ItemNbr}} readonly >
+		    </div>
+		</div>	
+		
+         <div class="form-group">
+		    <div class="col-sm-4">
+		 	 <label>Total Qty:</label>
+		      <input id="totqty" class="form-control" value={{row.entity.TotQty}} readonly >
+		    </div>
+			
+           <div class="col-sm-4">
+		 	 <label>Due Qty</label>
+		      <input id="dueqty" class="form-control" value={{row.entity.DueQty}} readonly >
+		    </div>
+			
+            <div class="col-sm-4">
+		 	 <label>Qty To Receive:</label>
+		      <input id="rcvqty" type="number" class="form-control"  ng-model="rcvqty" ng-pattern="/^[0-9]+$/" min=0 ng-change="checkRcvQty(rcvqty,row.entity.DueQty)">
+		    </div>
+		</div>	
+
+        <div class="form-group">
+		  <div class="col-sm-4">
+          <label>No of Pallets:</label>
+          <input id="pallet" class="form-control" ng-disabled="!rcvqty" ng-model="nopallet" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          </div>
+
+           <div class="col-sm-4">
+           <label>SlotID:</label>
+           <select id="slot" class="form-control"  ng-disabled="!rcvqty || !nopallet" ng-model="slotsource" ng-options="slt.slot for slt in slotid">
+           <option value=''>Select Slot</option>
+           </select>
+          </div>
+
+           <div class="col-sm-4">
+		   <label for="userid">Status:</label>
+           <span class="form-control" ng-model="useridsource" >{{row.entity.Status}} </span>
+          </div>
+		</div>
+		
+   <div>
+           <div class="form-group">
+		    <div class="col-md-6 center-block">
+	       <button class="btn-lg btn-primary custom center-block" ng-disabled = "!slotsource || show == 1 || overrideEnable" ng-click="show = 1;row.entity.Status='Received';row.entity.isLocked=true;noMsgFirst=1;persistData()">Receive</button>
+		   </div>
+		   <div class="col-md-6 center-block">
+	       <button class="btn-lg btn-primary custom center-block" ng-disabled = "!overrideEnable && !slotsource" data-toggle="modal" data-target="#myModal">Generate Override</button>
+		   </div>
+		      <div class="col-sm-8" style="margin-top:10px;width:1000px">
+             <div ng-show="show==1" class="alert alert-success">
+			 <a class="close" data-dismiss="alert">×</a>
+              <strong>Success! PO {{row.entity.PoNbr}} for Item {{row.entity.ItemNbr}} Received Successfully. Label {{row.entity.PoNbr}}{{row.entity.ItemNbr}}-{{slotsource.slot}} has been generated!!</strong>
+			 </div>
+             <div ng-show="row.entity.isLocked && noMsgFirst != 1 && row.entity.Status!='Waiting for Override'" class="alert alert-info">
+			 <a class="close" data-dismiss="alert">×</a>
+              <strong>PO {{row.entity.PoNbr}} for Item {{row.entity.ItemNbr}} has already been Received!!</strong>
+			 </div>	
+		     <div ng-show="row.entity.isLocked && row.entity.Status=='Waiting for Override'" class="alert alert-info">
+			 <a class="close" data-dismiss="alert">×</a>
+              <strong>PO {{row.entity.PoNbr}} for Item {{row.entity.ItemNbr}} is waiting for Manager Approval!!</strong>
+			 </div>		 		 
+            </div>	
+          </div>
+   </div> 
+
+
+
+       <script src="js/appforpo.js"></script>
+       </fieldset>
+</form>
+</div>
+</div>
+
+            <!--Modal -->
+           <div class="modal" id="myModal" role="dialog" data-backdrop="false">
+             <div class="modal-dialog">
+                 <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <p>Do you want to generate Supervisor Override?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-default" ng-click="row.entity.Status='Waiting for Override';row.entity.isLocked=true;persistDataOverride();"data-dismiss="modal">OK</button>
+                    </div>
+                  </div>
+            </div>
+          </div>
+</body>
+</html>
+
