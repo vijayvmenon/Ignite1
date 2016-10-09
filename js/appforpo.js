@@ -21,21 +21,26 @@ appforpo.controller('MainCtrl', ['$scope', '$http','localStorageService','$inter
  expandableRowScope: {
         subGridVariable: 'subGridScopeVariable',
          overrideEnable:false,
-      checkRcvQty:function(rcvqty,dueqty) {
-      if(rcvqty > dueqty)  {
+      checkRcvQty:function(dueqty) {
+      if(dueqty < 0)  {
      this.overrideEnable=true
         }
    else {
      this.overrideEnable=false
      }
   },
-  persistData:function () {
+  persistData:function (slot) {
    localStorage.setItem("gridData",JSON.stringify($scope.gridOptions.data));
   },
   noMsgFirst:0,
-  persistDataOverride:function () {
+  persistDataOverride:function (currentRow) {
    localStorage.setItem("gridData",JSON.stringify($scope.gridOptions.data)),
-   this.overrideEnable=false
+  // localStorage.setItem("suprvsrData",JSON.stringify(currentRow)),
+   this.overrideEnable=false,
+   console.log(currentRow)
+  },
+  dueQty:function(totqty,rcvqty) {
+    return totqty - rcvqty;
   }
 },
     showFooter: true,
@@ -81,200 +86,230 @@ appforpo.controller('MainCtrl', ['$scope', '$http','localStorageService','$inter
 
 
 var gridData = [{
-    "PoNbr": 34567,
-    "ItemNbr": 379892,
+    "PoNbr": 11111,
+    "ItemNbr": 10000,
     "TotQty": 21,
-    "DueQty": 12,
     "LabelNo": "3456737989212-A001",
     "UserID": "vmenon",
     "DoorNo": 101,
-    "TruckQty": 30,
+    "RcvQty":0,
     "Timestamp": "02/01/2016 21:00:00",
     "DeliveryNo": "12345",
     "Status": "Created",
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
     "isLocked":false
   }, {
-    "PoNbr": 34567,
-    "ItemNbr": 435672,
+    "PoNbr": 11111,
+    "ItemNbr": 10001,
     "TotQty": 23,
-    "DueQty": 14,
     "LabelNo": "3456743567214-B001",
     "UserID": "vmenon",
     "DoorNo": 102,
-    "TruckQty": 35,
+    "RcvQty":23,
     "Timestamp": "02/01/2016 21:00:00",
     "DeliveryNo": "12345",
     "Status": "Received",
-      "isLocked":true     
+    "SlotId":"A001",
+    "NoPallet":0,
+    "Comments":"",
+    "isLocked":true     
   }, {
-    "PoNbr": 34567,
-    "ItemNbr": 876234,
+    "PoNbr": 22222,
+    "ItemNbr": 10003,
     "TotQty": 35,
-    "DueQty": 28,
     "LabelNo": "3456787623428-D001",
     "UserID": "vmenon",
     "DoorNo": 103,
-    "TruckQty": 40,
+    "RcvQty":0,
     "Timestamp": "02/01/2016 21:00:00",
-    "DeliveryNo": "12345",
-    "Status": "Received",
-      "isLocked":true     
+    "DeliveryNo": "12346",
+    "Status": "Created",
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
+    "isLocked":false     
   }, {
-    "PoNbr": 43562,
-    "ItemNbr": 873245,
+    "PoNbr": 22222,
+    "ItemNbr": 10004,
     "TotQty": 38,
-    "DueQty": 19,
     "LabelNo": "4356287324519-D001",
     "UserID": "manney",
     "DoorNo": 101,
-    "TruckQty": 45,
+    "RcvQty":0,
     "Timestamp": "02/02/2016 21:00:00",
     "DeliveryNo": 12346,
     "Status": "Created",
-      "isLocked":false
+   "SlotId":"",
+    "NoPallet":0,
+    "Comments":"", 
+    "isLocked":false
   }, {
-    "PoNbr": 43562,
-    "ItemNbr": 678345,
+    "PoNbr": 33333,
+    "ItemNbr": 10005,
     "TotQty": 40,
-    "DueQty": 10,
     "LabelNo": "4356267834510-C001",
     "UserID": "manney",
     "DoorNo": 105,
-    "TruckQty": 60,
+    "RcvQty":0,
     "Timestamp": "02/02/2016 21:00:00",
     "DeliveryNo": 12346,
     "Status": "Created",
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
       "isLocked":false    
   }, {
-    "PoNbr": 43562,
-    "ItemNbr": 987324,
+    "PoNbr": 33333,
+    "ItemNbr": 10006,
     "TotQty": 41,
-    "DueQty": 34,
     "LabelNo": "4356298732434-A001",
     "UserID": "manney",
     "DoorNo": 103,
-    "TruckQty": 45,
+    "RcvQty":41,
     "Timestamp": "02/02/2016 21:00:00",
-    "DeliveryNo": 12346,
+    "DeliveryNo": 12347,
     "Status": "Received",
-      "isLocked":true     
+    "SlotId":"D001",
+    "NoPallet":0,
+    "Comments":"",
+   "isLocked":true     
   }, {
-    "PoNbr": 65412,
-    "ItemNbr": 458921,
+    "PoNbr": 44444,
+    "ItemNbr": 10004,
     "TotQty": 21,
-    "DueQty": 12,
     "LabelNo": "6541245892100-B001",
     "UserID": "ugonugu",
     "DoorNo": 102,
-    "TruckQty": 30,
+    "RcvQty":0,
     "Timestamp": "02/03/2016 21:00:00",
     "DeliveryNo": 12347,
     "Status": "Created",
-      "isLocked":false    
+   "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
+    "isLocked":false    
   }, {
-    "PoNbr": 65412,
-    "ItemNbr": 567214,
+    "PoNbr": 44444,
+    "ItemNbr": 10007,
     "TotQty": 31,
-    "DueQty": 16,
     "LabelNo": "6541256721416-A001",
     "UserID": "ugonugu",
     "DoorNo": 104,
-    "TruckQty": 45,
+    "RcvQty":31,
     "Timestamp": "02/03/2016 21:00:00",
-    "DeliveryNo": 12347,
+    "DeliveryNo": 12348,
     "Status": "Received",
-      "isLocked":true     
+    "SlotId":"B001",
+    "NoPallet":0,
+    "Comments":"",
+    "isLocked":true     
   }, {
-    "PoNbr": 65412,
-    "ItemNbr": 568926,
+    "PoNbr": 55555,
+    "ItemNbr": 10008,
     "TotQty": 21,
-    "DueQty": 21,
     "LabelNo": "6541256892621-D001",
     "UserID": "ugonugu",
     "DoorNo": 101,
-    "TruckQty": 35,
+    "RcvQty":0,
     "Timestamp": "02/03/2016 21:00:00",
-    "DeliveryNo": 12347,
+    "DeliveryNo": 12348,
     "Status": "Created",
-      "isLocked":false    
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
+    "isLocked":false    
   }, {
-    "PoNbr": 54398,
-    "ItemNbr": 123876,
+    "PoNbr": 55555,
+    "ItemNbr": 10006,
     "TotQty": 27,
-    "DueQty": 11,
     "LabelNo": "5439812387611-B001",
     "UserID": "b0naga",
     "DoorNo": 105,
-    "TruckQty": 30,
+    "RcvQty":0,
     "Timestamp": "02/04/2016 21:00:00",
     "DeliveryNo": 12348,
     "Status": "Created",
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
       "isLocked":false    
   }, {
-    "PoNbr": 54398,
-    "ItemNbr": 298456,
+    "PoNbr": 66666,
+    "ItemNbr": 10010,
     "TotQty": 25,
-    "DueQty": 15,
     "LabelNo": "5439829845615-A001",
     "UserID": "b0naga",
     "DoorNo": 102,
-    "TruckQty": 45,
+    "RcvQty":25,
     "Timestamp": "02/04/2016 21:00:00",
-    "DeliveryNo": 12348,
+    "DeliveryNo": 12349,
     "Status": "Received",
+    "SlotId":"A001",
+    "NoPallet":0,
+    "Comments":"",
       "isLocked":true     
   }, {
-    "PoNbr": 54398,
-    "ItemNbr": 908765,
+    "PoNbr": 66666,
+    "ItemNbr": 10011,
     "TotQty": 34,
-    "DueQty": 26,
     "LabelNo": "5439890876500-A001",
     "UserID": "b0naga",
     "DoorNo": 104,
-    "TruckQty": 55,
+    "RcvQty":0,
     "Timestamp": "02/04/2016 21:00:00",
-    "DeliveryNo": 12348,
+    "DeliveryNo": 12349,
     "Status": "Created",
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
       "isLocked":false    
   }, {
-    "PoNbr": 76435,
-    "ItemNbr": 290786,
+    "PoNbr": 66666,
+    "ItemNbr": 10012,
     "TotQty": 9,
-    "DueQty": 2,
     "LabelNo": "7643529078602-C001",
     "UserID": "lachu",
     "DoorNo": 101,
-    "TruckQty": 20,
+    "RcvQty":9,
     "Timestamp": "02/05/2016 21:00:00",
     "DeliveryNo": 12349,
     "Status": "Received",
-      "isLocked":true       
+    "SlotId":"C001",
+    "NoPallet":0,
+    "Comments":"",
+    "isLocked":true       
   }, {
-    "PoNbr": 76435,
-    "ItemNbr": 819546,
+    "PoNbr": 77777,
+    "ItemNbr": 10013,
     "TotQty": 17,
-    "DueQty": 10,
     "LabelNo": "7643581954610-D001",
     "UserID": "lachu",
     "DoorNo": 104,
-    "TruckQty": 25,
+    "RcvQty":0,
     "Timestamp": "02/05/2016 21:00:00",
-    "DeliveryNo": 12349,
+    "DeliveryNo": 12350,
     "Status": "Created",
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
       "isLocked":false    
   }, {
-    "PoNbr": 76435,
-    "ItemNbr": 298763,
+    "PoNbr": 88888,
+    "ItemNbr": 10014,
     "TotQty": 11,
-    "DueQty": 11,
     "LabelNo": "7643529876311-B001",
     "UserID": "lachu",
     "DoorNo": 102,
-    "TruckQty": 30,
+    "RcvQty":0,
     "Timestamp": "02/05/2016 21:00:00",
-    "DeliveryNo": 12349,
+    "DeliveryNo": 12350,
     "Status": "Created",
-      "isLocked":false    
+    "SlotId":"",
+    "NoPallet":0,
+    "Comments":"",
+    "isLocked":false    
   }
 
 ]
@@ -305,11 +340,13 @@ else {
     });
 	
 $scope.slotid = [
- {id:1,slot:'A001'},
-{id:2,slot:'B001'},
-{id:3,slot:'C001'},
-{id:4,slot:'D001'}
-];
+{ id:1, name: 'A001' },
+{ id:2, name: 'B001' },
+{ id:3, name: 'C001' },
+{ id:4, name: 'D001' }];
+
+//$scope.selectedslot= $scope.slotid[0];
+//$scope.selectedOption = $scope.options[0];
 
 }]);
 
