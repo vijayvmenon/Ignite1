@@ -131,11 +131,11 @@ appforpo.factory('gridFactory',function($http) {
   return {
     ser_var:"service variable",
         getDet:function() {
-      return $http.get('http://receiving.cfapps.io/getallpoinfo');
+      return $http.get('https://receiving.cfapps.io/getallpoinfo');
     },
 
     updDet:function(data) {
-      return $http.put('http://receiving.cfapps.io/updatepoinfo',data,{})
+      return $http.put('https://receiving.cfapps.io/updatepoinfo',data,{})
     }
   }
 })
