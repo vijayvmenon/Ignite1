@@ -2,7 +2,7 @@ var appforpo = angular.module('appforpo',['ui.grid','ui.grid.expandable','ui.gri
 
 
 
-appforpo.controller('MainCtrl', ['$scope', '$http','gridFactory','$interval', '$modal', '$log', '$window', function ($scope, $http,gridFactory,$interval, $modal, $log,$window) {
+appforpo.controller('MainCtrl', ['$scope', '$http','gridFactory','$interval', '$log', '$window', function ($scope, $http,gridFactory,$interval, $log,$window) {
 
  $scope.gotomain = function(){
 
@@ -58,6 +58,7 @@ appforpo.controller('MainCtrl', ['$scope', '$http','gridFactory','$interval', '$
     enableFiltering: true,
     enableRowSelection: true,
     rowHeight: 'auto',
+    virtualizationThreshold :50,
     enableSelectAll: false,
     enableRowHeaderSelection: false,
     selectionRowHeaderWidth: 35,
@@ -75,7 +76,7 @@ appforpo.controller('MainCtrl', ['$scope', '$http','gridFactory','$interval', '$
      { name: 'rcvdQty',enableFiltering: false},
      { name: 'deliveryNbr'},
      { name: 'userId'},
-     { name: 'poStatus'},
+     { name: 'poStatus',width: '12%', },
     // { name: 'rcvdTs',type: 'date', cellFilter: 'date:\'yyyy-MM-dd hh:mm:ss\'',enableFiltering: false,width: 250},
      { name: 'doorNbr'},
      {
@@ -87,18 +88,18 @@ appforpo.controller('MainCtrl', ['$scope', '$http','gridFactory','$interval', '$
 	enableSorting: false,
 	enableFiltering: false,
 	enableColumnMenu: false,
-	width: '14%', 
-    cellTemplate: "<div class=\'ui-grid-cell-contents expand-row\'>" + "<button class=\'btn btn-primary\' ng-disabled=\'isDisabled\' ng-click='grid.api.expandable.toggleRowExpansion(row.entity);grid.appScope.toggle = !grid.appScope.toggle'>{{grid.appScope.buttontext}}</button>" + "</div>"
+	width: '10%', 
+    cellTemplate: "<div class=\'ui-grid-cell-contents expand-row\'>" + "<button class=\'btn btn-primary\' ng-click='grid.api.expandable.toggleRowExpansion(row.entity);grid.appScope.toggle = !grid.appScope.toggle'>{{grid.appScope.buttontext}}</button>" + "</div>"
 	 }
   ];
+
 
 gridFactory.getDet()
 .success(function(response) {
   console.log(response);
  $scope.gridOptions.data=response;  
- if($scope.gridOptions.data[0].isLocked == "true") {
-  console.log('entered');
- }
+ $scope.gridlength=$scope.gridOptions.data.length;
+
 })
 .error(function() {
   console.log("error!!");
@@ -131,7 +132,8 @@ appforpo.factory('gridFactory',function($http) {
   return {
     ser_var:"service variable",
         getDet:function() {
-      return $http.get('https://receiving.cfapps.io/getallpoinfo');
+     return $http.get('https://receiving.cfapps.io/getallpoinfo');
+     //return $http.get('data1.json');
     },
 
     updDet:function(data) {
